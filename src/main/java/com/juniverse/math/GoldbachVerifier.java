@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
 /**
  * Comprueba la conjetura de Goldbach (todo par mayor que 2 es suma de dos primos).
  * Usa una criba de Eratóstenes hasta 10 millones y Miller-Rabin para complementos mayores.
@@ -16,14 +18,16 @@ import java.util.stream.Collectors;
  * @author ajuar
  */
 public class GoldbachVerifier {
+    private static final Logger LOGGER = AppLogger.get(GoldbachVerifier.class);
 
-    private static final int LIMIT_CRIBA = 10_000_000;
-    private final boolean[] isCompound = new boolean[LIMIT_CRIBA + 1];
+
+    private static final int SIEVE_LIMIT = 10_000_000;
+    private final boolean[] isCompound = new boolean[SIEVE_LIMIT + 1];
     private final List<Integer> primes;
 
-    /** Construye la criba de primos hasta {@code LIMIT_CRIBA}. */
+    /** Construye la criba de primos hasta {@code SIEVE_LIMIT}. */
     public GoldbachVerifier() {
-        this.primes = generatePrimes(LIMIT_CRIBA);
+        this.primes = generatePrimes(SIEVE_LIMIT);
     }
 
     /**
@@ -46,7 +50,7 @@ public class GoldbachVerifier {
             BigInteger complement = number.subtract(p);
             // Si cabe en la criba se consulta directamente; si no, se usa Miller-Rabin
             // (antes se truncaba con intValue() y se buscaba linealmente en la lista).
-            boolean complementIsPrime = complement.compareTo(BigInteger.valueOf(LIMIT_CRIBA)) <= 0
+            boolean complementIsPrime = complement.compareTo(BigInteger.valueOf(SIEVE_LIMIT)) <= 0
                     ? !isCompound[complement.intValue()] && complement.intValue() >= 2
                     : complement.isProbablePrime(20);
             if (complementIsPrime) {
@@ -86,7 +90,7 @@ public class GoldbachVerifier {
                             .collect(Collectors.toList())
             ).get();
         } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace(System.err);
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             pool.shutdown();
         }
