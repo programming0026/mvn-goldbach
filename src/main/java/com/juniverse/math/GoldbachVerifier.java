@@ -15,7 +15,7 @@ import java.util.logging.Level;
  * Comprueba la conjetura de Goldbach (todo par mayor que 2 es suma de dos primos).
  * Usa una criba de Eratóstenes hasta 10 millones y Miller-Rabin para complementos mayores.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class GoldbachVerifier {
     private static final Logger LOGGER = AppLogger.get(GoldbachVerifier.class);

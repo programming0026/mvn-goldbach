@@ -8,7 +8,7 @@ import java.util.logging.Level;
 /**
  * Verifica la conjetura de Goldbach para un rango de pares cercano a 10¹⁹ e informa cuántos cumplieron.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class Main {
     private static final Logger LOGGER = AppLogger.get(Main.class);
